@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: "root"
+    url: jdbc:mysql://127.0.0.1:3306/medical_record?serverTimezone=Asia/Shanghai&allowMultiQueries=true&mapUnderscoreToCamelCase=true
+    type: com.alibaba.druid.pool.DruidDataSource
+  servlet:
+    multipart:
+      max-request-size: 50MB
+      max-file-size: 50MB
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 20000
+    pool:
+      max-active: 8
+      min-idle: 0
+      max-idle: 8
+      max-wait: -1
+  mvc:
+#    view:
+#      prefix: /jsp/
+#      suffix: .jsp
+    static-path-pattern: /static/**
+  web:
+    resources:
+      static-locations: classpath:/static/,file:${photo.file.dir}
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+# 分配配置
+pagehelper:
+  helper-dialect: mysql # 设置数据库类型
+  reasonable: true  # 开启合理化
+  support-methods-arguments: true # 支持通过 mapper 接口参数来传递 分页参数
+  params: count=countSql  # 参数 成员变量 = ${xxx}
+
