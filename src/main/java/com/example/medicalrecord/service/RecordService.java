@@ -4,16 +4,13 @@ import com.example.medicalrecord.bean.*;
 import com.example.medicalrecord.enums.StatusCode;
 import com.example.medicalrecord.mapper.PatientMapper;
 import com.example.medicalrecord.mapper.RecordMapper;
-import com.example.medicalrecord.mapper.SetMapper;
 import com.example.medicalrecord.utils.CommUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -21,19 +18,9 @@ public class RecordService {
     @Autowired
     private RecordMapper recordMapper;
     @Autowired
-    private SetMapper setMapper;
-    @Autowired
     private PatientMapper patientMapper;
     @Autowired
     private LogService logService;
-
-    public List<Diagnose> getDiagnoseList(){
-        return setMapper.getDiagnoseList();
-    }
-
-    public List<Cure> getCureList(){
-        return setMapper.getCureList();
-    }
 
 
     @Transactional(rollbackFor = {RuntimeException.class, Error.class})

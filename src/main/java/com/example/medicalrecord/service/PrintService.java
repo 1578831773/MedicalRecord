@@ -17,7 +17,7 @@ import java.util.List;
  * 3、一个汉字的宽度大概是12点
  */
 @Service
-public class PrintTest {
+public class PrintService {
 
     @Autowired
     private PrintMapper printMapper;

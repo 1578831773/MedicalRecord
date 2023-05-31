@@ -1,7 +1,6 @@
 package com.example.medicalrecord.mapper;
 
 import com.example.medicalrecord.bean.Record;
-import com.example.medicalrecord.bean.ToothView;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

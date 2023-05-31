@@ -3,9 +3,8 @@ package com.example.medicalrecord.contoller;
 import com.example.medicalrecord.bean.PatientCard;
 import com.example.medicalrecord.bean.PrintRecord;
 import com.example.medicalrecord.bean.Record;
-import com.example.medicalrecord.mapper.SetMapper;
 import com.example.medicalrecord.service.ExcelService;
-import com.example.medicalrecord.service.PrintTest;
+import com.example.medicalrecord.service.PrintService;
 import com.example.medicalrecord.service.RecordService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +20,7 @@ public class RecordController {
     @Autowired
     private RecordService recordService;
     @Autowired
-    private SetMapper setMapper;
-    @Autowired
-    private PrintTest printTest;
+    private PrintService printTest;
     @Autowired
     private ExcelService excelService;
 
