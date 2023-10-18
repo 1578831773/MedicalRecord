@@ -15,10 +15,16 @@ public class LogService {
 
     public void addLog(String content){
         System.out.println(content);
-        Log log = new Log();
-        log.setContent(content);
-        log.setLogTime(CommUtils.gerTime());
-        logMapper.insertLog(log);
+        for(int i = content.length() / 600;i >= 0 ; i --){
+            Log log = new Log();
+            int ed = (i + 1) * 600;
+            if((i + 1) * 600 >= content.length()){
+                ed = content.length();
+            }
+            log.setContent(content.substring(i * 600, ed));
+            log.setLogTime(CommUtils.gerTime());
+            logMapper.insertLog(log);
+        }
     }
 
     public List<Log> getLogList(int page){

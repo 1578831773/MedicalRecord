@@ -12,4 +12,5 @@ public class PrintRecord {
     private String printTime;
     private double allInCost;
     private double recCost;
+    private double pay;
 }

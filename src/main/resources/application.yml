@@ -4,7 +4,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: "密码"
+    password: "root"
     url: jdbc:mysql://127.0.0.1:3306/medical_record?serverTimezone=Asia/Shanghai&allowMultiQueries=true&mapUnderscoreToCamelCase=true
     type: com.alibaba.druid.pool.DruidDataSource
   servlet:

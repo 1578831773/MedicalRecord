@@ -1,19 +1,87 @@
-<%@ page import="com.example.medicalrecord.enums.StatusCode" %>
-<%@ page import="com.example.medicalrecord.bean.PatientCard" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--
+  Created by IntelliJ IDEA.
+  User: 何西
+  Date: 2023/6/16
+  Time: 11:33
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored ="false" %>
-<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>诊断记录</title>
+    <title>门诊病历</title>
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.css"/>
     <script src="/static/js/jquery-1.11.1.js"></script>
     <script src="/static/bootstrap/js/bootstrap.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-
     <style>
+        .record {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            /*margin: 10px;*/
+            /*padding: 20px;*/
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+        }
+        .main h1, h2, h3 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ccc;
+        }
+        input {
+            margin: 3px;
+        }
+        textarea {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+        .form-section {
+            margin-bottom: 20px;
+        }
+        .form-section h3 {
+            margin-top: 0;
+        }
+        .form-section label {
+            font-weight: bold;
+        }
+        .form-section label, .form-section textarea {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .submit-button {
+            text-align: center;
+        }
+        .submit-button input[type="submit"]{
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .submit-button input[type='reset']{
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: grey;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
         .error{
             color: red;
         }
@@ -24,11 +92,10 @@
         }
     </style>
 
-
 </head>
 <body style="background-color: #c4e3f3">
 <div class="top col-sm-offset-1 col-sm-10 row" style="height: 100px; padding-top: 10px;">
-    <div class="webname col-sm-3"><h2>医疗诊断记录系统</h2></div>
+    <div class="webname col-sm-3"><h2>永皓齿科</h2></div>
 </div>
 <div class="main col-sm-offset-1 col-sm-10">
     <div class="navigation_bar">
@@ -45,197 +112,133 @@
                 <li><a href="/log/list">系统日志</a> </li>
             </ul>
         </div>
-        <div class="col-sm-11">
-<%--            <div class="panel-heading">--%>
-<%--                <h3 class="panel-title">新建病例</h3>--%>
-<%--            </div>--%>
-<%--            <div class="panel-body">--%>
-                <div class="panel panel-primary" style="border-top: 10px; background-color: white">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">添加病例</h3>
-                    </div>
-                    <div class="panel-body">
-                        <form class="form-horizontal col-sm-offset-1" onsubmit="return validateForm()" method="post" action="/record/addRecord" enctype="multipart/form-data">
-                            <input name="patientId" type="number" hidden>
-                            <div class="modal-body">
-                                <div class="form-group row">
-                                    <label for="name" class="control-label col-sm-1">姓名</label>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="请输入病人姓名">
-                                        <span class="error" id="nameErr"></span>
-                                    </div>
-                                </div>
+        <div class="record col-sm-11">
+            <div class="container">
+                <h1>门诊病历</h1>
+                <form method="post" action="/record/addRecord" style="margin-top: 20px" enctype="multipart/form-data">
 
-                                <div class="form-group row">
-                                    <label for="man" class=" control-label col-sm-1">性别</label>
-                                    <div class="radio col-sm-4">
-                                        <label class="col-sm-2">
-                                            <input type="radio" name="sex" id="man" value="男" checked> 男
-                                        </label>
-                                        <label class="col-sm-2">
-                                            <input type="radio" name="sex" id="woman" value="女">女
-                                        </label>
+                <div class="form-section">
+                    <h3>患者基本情况</h3>
+                    <table>
+                        <tr>
+                            <th>姓名</th>
+                            <td><input type="text" name="name" value="${patient.name}" required></td>
+                        </tr>
+                        <tr>
+                            <th>性别</th>
+                            <td>
+                                <select name="sex" required>
+                                    <c:if test="${patient.sex == '男' or patient.sex == null}">
+                                        <option value="男" selected>男</option>
+                                        <option value="女">女</option>
+                                    </c:if>
+                                    <c:if test="${patient.sex == '女'}">
+                                        <option value="男">男</option>
+                                        <option value="女" selected>女</option>
+                                    </c:if>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>年龄</th>
+                            <td><input type="number" name="age" value="${patient.age}" required></td>
+                        </tr>
+                        <tr>
+                            <th>电话</th>
+                            <td><input type="text" name="phone" value="${patient.phone}" required></td>
+                        </tr>
 
-                                    </div>
-                                    <%--                        <div class="radio col-sm-1">--%>
-                                    <%--                            <label>--%>
-                                    <%--                                --%>
-                                    <%--                            </label>--%>
-                                    <%--                        </div>--%>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="name" class=" control-label col-sm-1">年龄</label>
-                                    <div class="col-sm-2">
-                                        <input type="number" class="form-control" id="age" name="age" placeholder="请输入病人年龄">
-                                        <span class="error" id="ageErr"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="name" class="control-label col-sm-1">诊断</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control" id="diagnose" name="diagnose" placeholder="请输入诊断">
-                                        <span class="error" id="diagnoseErr"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="name" class="control-label col-sm-1">治疗方案</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control" id="cure" name="cure" placeholder="请输入治疗方案">
-                                        <span class="error" id="cureErr"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="name" class=" control-label col-sm-1">总费用</label>
-                                    <div class="col-sm-2">
-                                        <input type="number" class="form-control" id="allInCost" name="allInCost" placeholder="请输入总费用">
-                                        <span class="error" id="allInCostErr"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="name" class=" control-label col-sm-1">已收费</label>
-                                    <div class="col-sm-2">
-                                        <input type="number" class="form-control" id="recCost" name="recCost" placeholder="请输入已收费">
-                                        <span class="error" id="recCostErr"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="name" class="control-label col-sm-1">电话</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control" id="phone" name="phone" placeholder="请输入电话号码">
-                                        <span class="error" id="phoneErr"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="name" class="col-sm-1">备注</label>
-                                    <textarea name = "detail" class="form-control col-sm-8" rows="3" style="width: 450px"></textarea>
-                                </div>
-                                <div class="form-group row" style="padding-top: 50px">
-                                    <button type="reset" class="btn btn-default col-sm-offset-1" data-dismiss="modal">重置</button>
-                                    <button type="submit" class="btn btn-primary col-sm-offset-1">添加病例</button>
-                                </div>
-                            </div>
-
-                        </form>
-                    </div>
+                    </table>
                 </div>
-<%--            </div>--%>
+
+                <div class="form-section">
+                    <h3>门诊病历</h3>
+                    <table>
+                        <tr>
+                            <th>主诉</th>
+                            <td><textarea name="mainSuit" rows="3" ></textarea></td>
+                        </tr>
+                        <tr>
+                            <th>现病史</th>
+                            <td><textarea name="historyOfPresentIllness" rows="3" ></textarea></td>
+                        </tr>
+                        <tr>
+                            <th>既往史</th>
+                            <td><textarea name="previousHistory" rows="3" ></textarea></td>
+                        </tr>
+                        <tr>
+                            <th>体格检查</th>
+                            <td><textarea name="healthCheckUp" rows="3" ></textarea></td>
+                        </tr>
+                        <tr>
+                            <th>诊断</th>
+                            <td><textarea name="diagnose" rows="3"  required></textarea></td>
+                        </tr>
+                        <tr>
+                            <th>处理</th>
+                            <td><textarea name="cure" rows="3"  required></textarea></td>
+                        </tr>
+                        <tr>
+                            <th>医生签名</th>
+                            <td><input type="text" rows="3"  name="signature"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="form-section">
+                    <h3>项目费用</h3>
+                    <table>
+                        <tr>
+                            <th>项目</th>
+                            <td><textarea name="project"></textarea></td>
+                        </tr>
+                        <tr>
+                            <th>总费用</th>
+                            <td><input id="allInCost" step="0.01" type="number" name="allInCost" required>元</td>
+                        </tr>
+                        <tr>
+                            <th>已收费用</th>
+                            <td><input id="paid" step="0.01" type="number" name="paid" required>元</td>
+                        </tr>
+                        <tr>
+                            <th>备注</th>
+                            <td><textarea name = "detail" rows="3" ></textarea></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="submit-button">
+                    <input type="submit" value="添加病历">
+                    <input type="reset" value="重置">
+                </div>
+                </form>
+            </div>
         </div>
     </div>
-
 </div>
 
 <script>
-    // 清空 input 标签后的提示信息
-    var tags = document.getElementsByTagName('input');
-    for (var i = 0; i < tags.length; i++) {
-        tags[i].onchange = function(){
-            var idname = this.name + "Err";
-            document.getElementById(idname).innerHTML = '';
-        }
-    }
-    // 显示错误消息
-    function printError(elemId, hintMsg) {
-        document.getElementById(elemId).innerHTML = hintMsg;
-    }
-    // 验证表单数据
-    function validateForm() {
-        // 获取表单元素的值
-        var name = document.querySelector("input[name='name']").value;
-        var age = document.querySelector("input[name='age']").value;
-        var diagnose = document.querySelector("input[name='diagnose']").value;
-        var cure = document.querySelector("input[name='cure']").value;
-        var allInCost = document.querySelector("input[name='allInCost']").value;
-        var recCost = document.querySelector("input[name='recCost']").value;
-        var phone = document.querySelector("input[name='phone']").value;
+    const input1 = document.getElementById('allInCost');
+    const input2 = document.getElementById('paid')
+    // 监听输入事件
+    input1.addEventListener('input', function() {
+        const value = parseFloat(input1.value);
 
-        if(name == "" || name == null){
-            printError("nameErr", "用户名不能为空");
-            return false;
+        if (isNaN(value) || value < 0) {
+            input1.setCustomValidity(`请输入大于等于0的数字`);
+        } else {
+            input1.setCustomValidity(''); // 重置验证消息
         }
-        if(age == "" || age == null){
-            printError("ageErr", "年龄不能为空");
-            return false;
+    })
+    input2.addEventListener('input', function() {
+        const value2 = parseFloat(input2.value);
+        const value1 = parseFloat(input1.value);
+        if (isNaN(value2) || value2 > value1 || value2 < 0) {
+            input2.setCustomValidity(`请输入小于等于`+ value1 + `且大于0的数字`);
+        } else {
+            input2.setCustomValidity(''); // 重置验证消息
         }
-        if(diagnose == "" || diagnose == null){
-            printError("diagnoseErr", "诊断结果不能为空");
-            return false;
-        }
-        if(cure == "" || cure == null){
-            printError("cureErr", "治疗方案不能为空");
-            return false;
-        }
-        if(allInCost == "" || allInCost == null){
-            printError("allInCostErr", "总费用不能为空");
-            return false;
-        }
-        if(recCost == "" || recCost == null){
-            printError("recCostErr", "已收不能为空");
-            return false;
-        }
-        if(phone == "" || phone == null){
-            printError("phoneErr", "电话不能为空");
-            return false;
-        }
-
-    }
-
-</script>
-
-
-<script>
-    window.onload = function(){
-        <%
-             String errorMsg = (String)request.getAttribute("errorMsg");
-            if(errorMsg != null){
-        %>
-        alert("<%=errorMsg%>");
-        <%
-            request.removeAttribute("errorMsg");
-            }
-        %>
-
-        <%
-               PatientCard patient = (PatientCard)request.getAttribute("patient");
-               if(patient != null){
-                    if(patient.getSex().equals("男")){
-        %>
-        document.getElementById("man").setAttribute("checked", "checked")
-        <%
-                }else{
-        %>
-        document.getElementById("woman").setAttribute("checked", "checked")
-        <%
-                }
-        %>
-        document.getElementsByName("patientId")[0].value = ${patient.patientId}
-            document.getElementsByName("name")[0].value = "${patient.name}"
-                document.getElementsByName("age")[0].value = ${patient.age}
-                    document.getElementsByName("phone")[0].value = "${patient.phone}"
-        <%
-            }
-        %>
-
-    };
+    })
 </script>
 </body>
 </html>

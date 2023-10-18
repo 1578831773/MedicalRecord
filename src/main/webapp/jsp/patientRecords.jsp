@@ -87,10 +87,10 @@
                             <tr>
                                 <td class="col-sm-1">${record.medicalId}</td>
                                 <td class="col-sm-2">${record.firstVisitTime}</td>
-                                <td class="col-sm-2">${record.diagnose}</td>
-                                <td class="col-sm-2">${record.cure}</td>
-                                <td class="col-sm-1">${record.allInCost}</td>
-                                <td class="col-sm-1">${record.recCost}</td>
+                                <td class="col-sm-2">${record.medical.diagnose}</td>
+                                <td class="col-sm-2">${record.medical.cure}</td>
+                                <td class="col-sm-1">${record.projectCost.allInCost}</td>
+                                <td class="col-sm-1">${record.projectCost.paid}</td>
                                 <td>
                                     <form class="form-horizontal col-sm-8 row" role="form" action="/record/detail" method="get">
                                         <input name="medicalId" type="number" class="hidden" value="${record.medicalId}">

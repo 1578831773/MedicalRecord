@@ -17,7 +17,8 @@
 <div class="main col-sm-offset-1 col-sm-10">
     <div class="navigation_bar">
         <ul class="breadcrumb">
-            <li class="active">诊断记录</li>
+            <li><a href="/record/list">诊断记录</a></li>
+            <li class="active">回收站</li>
         </ul>
     </div>
     <div class="content row">
@@ -31,34 +32,29 @@
             </ul>
         </div>
         <div class="record_list col-sm-11" style="background-color: white; padding-top: 30px">
-            <div class="row">
-                <form class="form-horizontal col-sm-8 row" role="form" action="/record/search" method="get">
-                    <div class="col-sm-6">
-                        <input type="text" class="form-control" placeholder="输入要搜索的记录" name="content">
-                    </div>
-                    <div class="form-group col-sm-2" >
-                        <label>
-                            <input type="radio" name="searchFlg" value="1" checked> 内容
-                        </label>
-                        <label>
-                            <input type="radio" name="searchFlg" value="2"> 编号
-                        </label>
-                    </div>
-                    <div class="col-sm-2">
-                        <button type="submit" class="btn btn-default">
-                            <span class="glyphicon glyphicon-search	"></span>
-                        </button>
-                    </div>
-                </form>
-                <div class="col-sm-offset-1 row">
-                    <a class="btn btn-default" role="button" href="/record/excel">导出为excel</a>
-                    <a class="btn btn-default" role="button" href="/record/deletedList">回收站</a>
-                    <button class="btn btn-primary" id="toggleDeleteButtons">显示/隐藏删除按钮</button>
-                </div>
-            </div>
+<%--            <div class="row">--%>
+<%--                <form class="form-horizontal col-sm-8 row" role="form" action="/record/search" method="get">--%>
+<%--                    <div class="col-sm-6">--%>
+<%--                        <input type="text" class="form-control" placeholder="输入要搜索的记录" name="content">--%>
+<%--                    </div>--%>
+<%--                    <div class="form-group col-sm-2" >--%>
+<%--                        <label>--%>
+<%--                            <input type="radio" name="searchFlg" value="1" checked> 内容--%>
+<%--                        </label>--%>
+<%--                        <label>--%>
+<%--                            <input type="radio" name="searchFlg" value="2"> 编号--%>
+<%--                        </label>--%>
+<%--                    </div>--%>
+<%--                    <div class="col-sm-2">--%>
+<%--                        <button type="submit" class="btn btn-default">--%>
+<%--                            <span class="glyphicon glyphicon-search	"></span>--%>
+<%--                        </button>--%>
+<%--                    </div>--%>
+<%--                </form>--%>
+<%--            </div>--%>
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">诊断记录</h3>
+                    <h3 class="panel-title">回收站中的诊断记录</h3>
                 </div>
                 <div class="panel-body">
                     <table class="table">
@@ -73,7 +69,6 @@
                             <th>总费用</th>
                             <th>已收</th>
                             <th>电话</th>
-                            <th></th>
                             <th></th>
                         </tr>
                         </thead>
@@ -91,18 +86,11 @@
                                 <td class="col-sm-1">${record.projectCost.paid}</td>
                                 <td class="col-sm-2">${record.patientCard.phone}</td>
                                 <td>
-                                    <form class="form-horizontal col-sm-8 row" role="form" action="/record/detail" method="get">
-                                        <input name="medicalId" type="number" class="hidden" value="${record.medicalId}">
-                                        <input name="page" type="number" value="${page}" hidden>
-                                        <button type="submit" class="btn btn-primary">查看</button>
-                                    </form>
-                                </td>
-                                <td>
                                     <form action="/record/delete" method="post">
                                         <input name="medicalId" value="${record.medicalId}" type="number" hidden>
-                                        <input name="flag" value="1" type="number" hidden>
+                                        <input name="flag" value="0" type="number" hidden>
                                         <input name="page" value="${page}" type="number" hidden>
-                                        <button class="deleteButton btn btn-default" style="display: none;" type="submit">删除</button>
+                                        <button class="deleteButton btn btn-default" type="submit">恢复</button>
                                     </form>
                                 </td>
                             </tr>
@@ -115,17 +103,17 @@
             <div class="col-sm-offset-2">
                 <ul class="pagination">
                     <c:if test="${page != 1}">
-                        <li><a href="/record/list?page=${page-1}">&laquo;</a></li>
+                        <li><a href="/record/deletedList?page=${page-1}">&laquo;</a></li>
                     </c:if>
                     <c:forEach var="i" begin="${startPage}" end="${page+pageCount}">
                         <c:if test="${i == page}">
                             <li class="active"><a href="#">${i}</a></li>
                         </c:if>
                         <c:if test="${i != page}">
-                            <li><a href="/record/list?page=${i}">${i}</a></li>
+                            <li><a href="/record/deletedList?page=${i}">${i}</a></li>
                         </c:if>
                     </c:forEach>
-                    <li><a href="/record/list?page=${page+1}">&raquo;</a></li>
+                    <li><a href="/record/deletedList?page=${page+1}">&raquo;</a></li>
                 </ul>
             </div>
 
@@ -148,20 +136,6 @@
         }
     }
 </script>
-<script>
-    // 获取"删除记录按钮"的按钮
-    var toggleButton = document.getElementById("toggleDeleteButtons");
 
-    // 添加点击事件
-    toggleButton.addEventListener("click", function() {
-        // 获取所有删除按钮
-        var deleteButtons = document.querySelectorAll(".deleteButton");
-
-        // 遍历每个删除按钮，切换其显示状态
-        deleteButtons.forEach(function(button) {
-            button.style.display = button.style.display === "none" ? "inline-block" : "none";
-        });
-    });
-</script>
 </body>
 </html>

@@ -5,13 +5,12 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Record extends PatientCard{
+public class Record {
     private int medicalId;
     private String firstVisitTime;
-    private String diagnose;
-    private String cure;
-    private double allInCost;
-    private double recCost;
+    private PatientCard patientCard;
+    private Medical medical;
+    private ProjectCost projectCost;
     private String detail;
     private int ifPrinted;
 
@@ -19,35 +18,31 @@ public class Record extends PatientCard{
         super();
     }
 
-    public Record(String name, String sex, int age, String phone, String diagnose, String cure, double allInCost, double recCost, String detail) {
-        super(name, sex, age, phone);
-        this.diagnose = diagnose;
-        this.cure = cure;
-        this.allInCost = allInCost;
-        this.recCost = recCost;
+    public Record(String name, String sex, int age, String phone,
+                  String mainSuit, String historyOfPresentIllness, String previousHistory, String healthCheckUp, String diagnose, String cure, String signature,
+                  String project, double allInCost, double paid,
+                  String detail) {
+        this.patientCard = new PatientCard(name, sex, age, phone);
+        this.medical = new Medical(mainSuit, historyOfPresentIllness, previousHistory, healthCheckUp, diagnose, cure, signature);
+        this.projectCost = new ProjectCost(project, allInCost, paid);
         this.detail = detail;
     }
 
-    public String getPatientToString(){
-        return super.toString();
-    }
 
     @Override
     public String toString() {
         return "Record{" +
-                "patientId=" + patientId +
-                ", name='" + name + '\'' +
-                ", sex='" + sex + '\'' +
-                ", age=" + age +
-                ", phone='" + phone + '\'' +
-                ", medicalId=" + medicalId +
+                "medicalId=" + medicalId +
                 ", firstVisitTime='" + firstVisitTime + '\'' +
-                ", diagnose='" + diagnose + '\'' +
-                ", cure='" + cure + '\'' +
-                ", allInCost=" + allInCost +
-                ", recCost=" + recCost +
+                ", patientCard=" + patientCard.toString() +
+                ", medical=" + medical.toString() +
+                ", projectCost=" + projectCost.toString() +
                 ", detail='" + detail + '\'' +
-                ", ifPrinted=" + ifPrinted +
                 '}';
     }
+//    public String toString(){
+//        return medicalId + "," + firstVisitTime + "," + patientCard.getPatientId()+"," + patientCard.getName()+"," + patientCard.getSex()+"," + patientCard.getSex()+"," + patientCard.getSex()+"," + patientCard.getPhone()+"," +
+//                medical.getMainSuit()+"," + medical.getHistoryOfPresentIllness()+"," + medical.getPreviousHistory()+"," + medical.getHealthCheckUp()+"," + medical.getDiagnose()+"," + medical.getCure()+"," + medical.getSignature()+"," +
+//                projectCost.getProject()+"," + projectCost.getAllInCost()+"," + projectCost.getPaid();
+//    }
 }

@@ -1,6 +1,76 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.medicalrecord.mapper.RecordMapper">
+    <resultMap id="patientMap" type="com.example.medicalrecord.bean.PatientCard" autoMapping="true">
+        <id column="patient_id" property="patientId"/>
+    </resultMap>
+    <resultMap id="medicalMap" type="com.example.medicalrecord.bean.Medical" autoMapping="true">
+    </resultMap>
+    <resultMap id="costMap" type="com.example.medicalrecord.bean.ProjectCost" autoMapping="true">
+    </resultMap>
+    <resultMap id="recordMap" type="com.example.medicalrecord.bean.Record" autoMapping="true">
+        <association property="patientCard" resultMap="patientMap"/>
+        <association property="medical" resultMap="medicalMap"/>
+        <association property="projectCost" resultMap="costMap"/>
+    </resultMap>
 
+    <select id="getRecordList" resultMap="recordMap">
+        select a.*, b.*
+            from record a
+            left join patient b on a.patient_id = b.patient_id
+            where a.status = 0
+            order by a.medical_id desc limit #{s}, 10
+    </select>
 
+    <select id="getDeletedRecordList" resultMap="recordMap">
+        select a.*, b.*
+        from record a
+                 left join patient b on a.patient_id = b.patient_id
+        where a.status = 1
+        order by a.medical_id desc limit #{s}, 10
+    </select>
+
+    <select id="getAllRecordList" resultMap="recordMap">
+        select a.*, b.*
+        from record a
+        left join patient b on a.patient_id = b.patient_id
+        where a.status = 0
+        order by a.medical_id
+    </select>
+
+    <select id="getAllDeletedRecordList" resultMap="recordMap">
+        select a.*, b.*
+        from record a
+                 left join patient b on a.patient_id = b.patient_id
+        where a.status = 1
+        order by a.medical_id
+    </select>
+
+    <select id="getRecordByMedicalId" resultMap="recordMap">
+        select a.*, b.* from record a
+        left join patient b on a.patient_id = b.patient_id
+        where a.status = 0
+        and a.medical_id = #{medicalId}
+    </select>
+
+    <select id="searchRecord" resultMap="recordMap">
+        select a.*, b.* from record a
+        left join patient b on a.patient_id = b.patient_id
+        where a.status = 0 and (a.diagnose like concat('%', concat(#{content}, '%')) or a.cure like concat('%', concat(#{content}, '%'))
+        or a.detail like concat('%', concat(#{content}, '%'))
+        or b.name like concat('%', concat(#{content}, '%'))
+        or b.sex like  concat('%', concat(#{content}, '%'))
+        or b.age like concat('%', concat(#{content}, '%'))
+        or b.phone like concat('%', concat(#{content}, '%'))
+        or a.first_visit_time like concat('%', concat(#{content}, '%')))
+        order by a.medical_id desc limit #{s}, 10
+    </select>
+
+    <select id="getRecordsByPatientId" resultMap="recordMap">
+        select *
+        from record
+        where patient_id = #{patientId}
+        and status = 0
+        order by medical_id desc limit #{s}, 10
+    </select>
 </mapper>

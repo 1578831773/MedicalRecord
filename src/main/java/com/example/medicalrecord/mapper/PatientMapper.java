@@ -11,10 +11,10 @@ public interface PatientMapper {
     @Insert("insert into patient(name, sex, age, phone) " +
             "values(#{name}, #{sex}, #{age}, #{phone})")
     @Options(useGeneratedKeys = true, keyProperty = "patientId")
-    void addPatient(Record record);
+    void addPatient(PatientCard patientCard);
 
-    @Update("update patient set name = #{name}, sex = #{sex},  age = #{age}, phone = #{phone} where patient_id = #{patientId}")
-    void updatePatient(Record record);
+    @Update("update patient set name = #{record.patientCard.name}, sex = #{record.patientCard.sex},  age = #{record.patientCard.age}, phone = #{record.patientCard.phone} where patient_id = #{record.patientCard.patientId}")
+    void updatePatient(@Param("record") Record record);
 
     @Select("select * from patient order by patient_id limit #{s}, 8")
     List<PatientCard> getPatientList(int s);
@@ -31,7 +31,7 @@ public interface PatientMapper {
     @Select("select count(*) from patient where name like concat('%', concat(#{name}, '%'))")
     int getPatientCountForSearch(String name);
 
-    @Select("select count(*) from patient where patient_id = #{patientId} and name = #{name} and age = #{age} and sex = #{sex} and phone = #{phone}")
+    @Select("select count(*) from patient where patient_id = #{patientId} and name = #{name} and sex = #{sex} and phone = #{phone}")
     int ifPatientInfoSameByPatientId(PatientCard patientCard);
 
     @Select("select patient_id from patient where name = #{name} and age = #{age} and sex = #{sex} and phone = #{phone}")

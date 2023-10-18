@@ -12,7 +12,7 @@
 </head>
 <body style="background-color: #c4e3f3">
 <div class="top col-sm-offset-1 col-sm-10 row" style="height: 100px; padding-top: 10px;">
-    <div class="webname col-sm-3"><h2>医疗诊断记录系统</h2></div>
+    <div class="webname col-sm-3"><h2>永皓齿科</h2></div>
 </div>
 <div class="main col-sm-offset-1 col-sm-10">
     <div class="navigation_bar">

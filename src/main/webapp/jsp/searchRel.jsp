@@ -12,7 +12,7 @@
 </head>
 <body style="background-color: #c4e3f3">
 <div class="top col-sm-offset-1 col-sm-10 row" style="height: 100px; padding-top: 10px;">
-    <div class="webname col-sm-3"><h2>医疗诊断记录系统</h2></div>
+    <div class="webname col-sm-3"><h2>永皓齿科</h2></div>
 </div>
 <div class="main col-sm-offset-1 col-sm-10">
     <div class="navigation_bar">
@@ -54,14 +54,14 @@
                 <c:forEach var="record" items="${recordList}">
                     <tr>
                         <td class="col-sm-1">${record.medicalId}</td>
-                        <td class="col-sm-1">${record.name}</td>
-                        <td class="col-sm-1">${record.sex}</td>
+                        <td class="col-sm-1">${record.patientCard.name}</td>
+                        <td class="col-sm-1">${record.patientCard.sex}</td>
                         <td class="col-sm-2">${record.firstVisitTime}</td>
-                        <td class="col-sm-2">${record.diagnose}</td>
-                        <td class="col-sm-2">${record.cure}</td>
-                        <td class="col-sm-1">${record.allInCost}</td>
-                        <td class="col-sm-1">${record.recCost}</td>
-                        <td class="col-sm-2">${record.phone}</td>
+                        <td class="col-sm-2">${record.medical.diagnose}</td>
+                        <td class="col-sm-2">${record.medical.cure}</td>
+                        <td class="col-sm-1">${record.projectCost.allInCost}</td>
+                        <td class="col-sm-1">${record.projectCost.paid}</td>
+                        <td class="col-sm-2">${record.patientCard.phone}</td>
                         <td>
                             <form class="form-horizontal col-sm-8 row" role="form" action="/record/detail" method="get">
                                 <input name="medicalId" type="number" class="hidden" value="${record.medicalId}">
